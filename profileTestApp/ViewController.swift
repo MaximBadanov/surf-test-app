@@ -3,10 +3,10 @@ import UIKit
 
 class ViewController: UIViewController {
 	
-	var arrayOfSkills = ["Skillbox", "GUAP", "ITMO","Mentor","iOS SDK",
-						 "XCode","Многопоточность", "MVC", "CoreData",
-						 "UX/UI","King of antipatterns", "iOSNubbie", "Signletone",
-						 "Prototype", "Delegation","OOP"]
+	var arrayOfSkills = ["Basics of Swift", "Basics of Python" , "UIkit",
+						 "XCode","Многопоточность", "MVC","CoreData",
+						 "UX/UI","King of antipatterns","OOP",  "iOSNubbie", "Singletone",
+						 "Prototype", "Delegation"]
 	
 	private lazy var topPartOfScreen: UIView = {
 		let topPart = UIView()
@@ -17,7 +17,7 @@ class ViewController: UIViewController {
 	private lazy var photo: UIImageView = {
 		let photo = UIImageView()
 		photo.backgroundColor = .gray
-		photo.image = UIImage(named: "me")
+		photo.image = UIImage(named: ProfileModel.pofile.imageName)
 		photo.layer.cornerRadius = 60
 		photo.clipsToBounds = true
 		photo.contentMode = .scaleAspectFit
@@ -26,7 +26,7 @@ class ViewController: UIViewController {
 	
 	private lazy var name: UILabel = {
 		let name = UILabel()
-		name.text = "Баданов Максим\nИгоревич"
+		name.text = ProfileModel.pofile.name
 		name.numberOfLines = 2
 		name.textAlignment = .center
 		name.font = .systemFont(ofSize: 24, weight: .bold)
@@ -35,7 +35,7 @@ class ViewController: UIViewController {
 	
 	private lazy var position: UILabel = {
 		let position = UILabel()
-		position.text = "iOS developer trainee, опыт менее 1 года"
+		position.text = ProfileModel.pofile.description
 		position.textAlignment = .center
 		position.font = .systemFont(ofSize: 14, weight: .medium)
 		position.textColor = UIColor(red: 0.588, green: 0.584, blue: 0.608, alpha: 1)
@@ -51,13 +51,13 @@ class ViewController: UIViewController {
 	
 	private lazy var city: UILabel = {
 		let city = UILabel()
-		city.text = "Санкт-Петербург"
+		city.text = ProfileModel.pofile.place
 		city.font = .systemFont(ofSize: 14, weight: .medium)
 		city.textColor = UIColor(red: 0.588, green: 0.584, blue: 0.608, alpha: 1)
 		return city
 	}()
 	
-	private lazy var stack: UIStackView = {
+	private lazy var locationStack: UIStackView = {
 		let stack = UIStackView()
 		stack.axis = .horizontal
 		stack.addArrangedSubview(dot)
@@ -68,7 +68,7 @@ class ViewController: UIViewController {
 	
 	private lazy var aboutMe: UILabel = {
 		let aboutMe = UILabel()
-		aboutMe.text = "Not enough experienced software engineer, still getting skills in developing mobile apps"
+		aboutMe.text = ProfileModel.pofile.about
 		aboutMe.textAlignment = .left
 		aboutMe.numberOfLines = 2
 		aboutMe.font = .systemFont(ofSize: 14)
@@ -92,22 +92,30 @@ class ViewController: UIViewController {
 	}()
 	
 	private lazy var collection: UICollectionView = {
-		let layout = UICollectionViewFlowLayout()
-		layout.scrollDirection = .vertical
-		
 		let collection = UICollectionView(frame: .zero,
-										  collectionViewLayout: layout)
-		layout.minimumLineSpacing = 12
-		layout.minimumInteritemSpacing = 12
-		
-		
+										  collectionViewLayout: makeLayout())
 		return collection
 	}()
+	
+	private func makeLayout() -> UICollectionViewLayout {
+		UICollectionViewCompositionalLayout { sectionIndex, env in
+			let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(60), heightDimension: .fractionalHeight(1.0))
+			let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+			let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(56))
+			let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+			group.contentInsets = .init(top: 12, leading: 0, bottom: 0, trailing: 0)
+			group.interItemSpacing = .fixed(12)
+
+			let section = NSCollectionLayoutSection(group: group)
+			return section
+		}
+	}
 	
 	private lazy var addButton: UIButton = {
 		var button = UIButton()
 		button.setImage(UIImage(named: "add"), for: .normal)
-		button.addTarget(self, action: #selector(addNewSkill), for: .touchUpInside)
+		button.addTarget(self, action: #selector(editingSkills), for: .touchUpInside)
 		return button
 	}()
 	
@@ -118,7 +126,7 @@ class ViewController: UIViewController {
 		photo.translatesAutoresizingMaskIntoConstraints = false
 		name.translatesAutoresizingMaskIntoConstraints = false
 		position.translatesAutoresizingMaskIntoConstraints = false
-		stack.translatesAutoresizingMaskIntoConstraints = false
+		locationStack.translatesAutoresizingMaskIntoConstraints = false
 		aboutMe.translatesAutoresizingMaskIntoConstraints = false
 		about.translatesAutoresizingMaskIntoConstraints = false
 		mySkills.translatesAutoresizingMaskIntoConstraints = false
@@ -131,72 +139,72 @@ class ViewController: UIViewController {
 		view.addSubview(mySkills)
 		view.addSubview(collection)
 		view.addSubview(addButton)
+
 		
 		topPartOfScreen.addSubview(photo)
 		topPartOfScreen.addSubview(name)
 		topPartOfScreen.addSubview(position)
-		topPartOfScreen.addSubview(stack)
+		topPartOfScreen.addSubview(locationStack)
 		
-		topPartOfScreen.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-		topPartOfScreen.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-		topPartOfScreen.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-		topPartOfScreen.heightAnchor.constraint(equalToConstant: 387).isActive = true
+		NSLayoutConstraint.activate([
+		topPartOfScreen.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+		topPartOfScreen.topAnchor.constraint(equalTo: view.topAnchor),
+		topPartOfScreen.widthAnchor.constraint(equalTo: view.widthAnchor),
+		topPartOfScreen.heightAnchor.constraint(equalToConstant: 387),
 		
-		photo.centerXAnchor.constraint(equalTo: topPartOfScreen.centerXAnchor).isActive = true
-		photo.widthAnchor.constraint(equalToConstant: 120).isActive = true
-		photo.heightAnchor.constraint(equalToConstant: 120).isActive = true
-		photo.bottomAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: -143).isActive = true
-		
-		
-		name.leadingAnchor.constraint(equalTo: topPartOfScreen.leadingAnchor, constant: 60).isActive = true
-		name.trailingAnchor.constraint(equalTo: topPartOfScreen.trailingAnchor, constant: -60).isActive = true
-		name.heightAnchor.constraint(equalToConstant: 64).isActive = true
-		name.bottomAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: -63).isActive = true
-		
-		position.leadingAnchor.constraint(equalTo: topPartOfScreen.leadingAnchor, constant: 51).isActive = true
-		position.trailingAnchor.constraint(equalTo: topPartOfScreen.trailingAnchor, constant: -51).isActive = true
-		position.heightAnchor.constraint(equalToConstant: 20).isActive = true
-		position.bottomAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: -39).isActive = true
+		photo.centerXAnchor.constraint(equalTo: topPartOfScreen.centerXAnchor),
+		photo.widthAnchor.constraint(equalToConstant: 120),
+		photo.heightAnchor.constraint(equalToConstant: 120),
+		photo.bottomAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: -143),
 		
 		
-		stack.leadingAnchor.constraint(equalTo: topPartOfScreen.leadingAnchor, constant: 120).isActive = true
-		stack.trailingAnchor.constraint(equalTo: topPartOfScreen.trailingAnchor, constant: -120).isActive = true
-		stack.heightAnchor.constraint(equalToConstant: 20).isActive = true
-		stack.bottomAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: -19).isActive = true
+		name.leadingAnchor.constraint(equalTo: topPartOfScreen.leadingAnchor, constant: 60),
+		name.trailingAnchor.constraint(equalTo: topPartOfScreen.trailingAnchor, constant: -60),
+		name.heightAnchor.constraint(equalToConstant: 64),
+		name.bottomAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: -63),
 		
-		aboutMe.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-		aboutMe.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
-		aboutMe.heightAnchor.constraint(equalToConstant: 40).isActive = true
-		aboutMe.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60).isActive = true
+		position.leadingAnchor.constraint(equalTo: topPartOfScreen.leadingAnchor, constant: 51),
+		position.trailingAnchor.constraint(equalTo: topPartOfScreen.trailingAnchor, constant: -51),
+		position.heightAnchor.constraint(equalToConstant: 20),
+		position.bottomAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: -39),
 		
-		about.leadingAnchor.constraint(equalTo: aboutMe.leadingAnchor).isActive = true
-		about.heightAnchor.constraint(equalToConstant: 20).isActive = true
-		about.widthAnchor.constraint(equalToConstant: 70).isActive = true
-		about.bottomAnchor.constraint(equalTo: aboutMe.topAnchor).isActive = true
 		
-		mySkills.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-		mySkills.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 48).isActive = true
-		mySkills.heightAnchor.constraint(equalToConstant: 20).isActive = true
-		mySkills.topAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: 21).isActive = true
+		locationStack.leadingAnchor.constraint(equalTo: topPartOfScreen.leadingAnchor, constant: 120),
+		locationStack.trailingAnchor.constraint(equalTo: topPartOfScreen.trailingAnchor, constant: -120),
+		locationStack.heightAnchor.constraint(equalToConstant: 20),
+		locationStack.bottomAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: -19),
 		
-		collection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-		collection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
-		collection.topAnchor.constraint(equalTo: mySkills.bottomAnchor, constant: 20).isActive = true
-		collection.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -152).isActive = true
+		aboutMe.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+		aboutMe.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+		aboutMe.heightAnchor.constraint(equalToConstant: 40),
+		aboutMe.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60),
 		
-		//		addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 335).isActive = true
-		addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
-		addButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
-		addButton.bottomAnchor.constraint(equalTo: mySkills.bottomAnchor).isActive = true
+		about.leadingAnchor.constraint(equalTo: aboutMe.leadingAnchor),
+		about.heightAnchor.constraint(equalToConstant: 20),
+		about.widthAnchor.constraint(equalToConstant: 70),
+		about.bottomAnchor.constraint(equalTo: aboutMe.topAnchor),
+		
+		mySkills.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+		mySkills.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 48),
+		mySkills.heightAnchor.constraint(equalToConstant: 20),
+		mySkills.topAnchor.constraint(equalTo: topPartOfScreen.bottomAnchor, constant: 21),
+		
+		collection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+		collection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+		collection.topAnchor.constraint(equalTo: mySkills.bottomAnchor, constant: 20),
+		collection.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -152),
+		
+		addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+		addButton.heightAnchor.constraint(equalToConstant: 24),
+		addButton.bottomAnchor.constraint(equalTo: mySkills.bottomAnchor)
+		])
 	}
-	
-	@objc func addNewSkill() {
+
+	@objc func editingSkills() {
 		arrayOfSkills.append("+")
-		collection.reloadData()
 		addButton.setImage(UIImage(named: "check"), for: .normal)
-		
+		collection.reloadData()
 	}
-	
 	
 	
 	override func viewDidLoad() {
@@ -241,7 +249,7 @@ extension ViewController: UICollectionViewDelegate {
 				})
 				let cancelAction = UIAlertAction(title: "Закрыть", style: .cancel) { _ in
 					self.arrayOfSkills.remove(at: self.arrayOfSkills.count - 1)
-					self.addButton.setImage(UIImage(named: "add"), for: .normal)
+					self.addButton.setImage(UIImage(named: "add"), for: .selected)
 					self.collection.reloadData()
 				}
 				alert.addAction(cancelAction)
@@ -277,17 +285,8 @@ extension ViewController: UICollectionViewDelegate {
 				}
 				alertOfDelete.addAction(cancelOfDeleteAction)
 				self.present(alertOfDelete, animated: true)
-				
+
 			}
 		}
-	}
-}
-
-
-extension ViewController: UICollectionViewDelegateFlowLayout {
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-		let string = arrayOfSkills[indexPath.row]
-		let width = (string.count * 5) + 48
-		return CGSize(width:width, height: 44)
 	}
 }

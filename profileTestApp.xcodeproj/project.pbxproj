@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9D67903B2AB4F19000220920 /* ProfileStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D67903A2AB4F19000220920 /* ProfileStruct.swift */; };
 		9DFF82A32A78EEBA00DACA06 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFF82A22A78EEBA00DACA06 /* AppDelegate.swift */; };
 		9DFF82A52A78EEBA00DACA06 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFF82A42A78EEBA00DACA06 /* SceneDelegate.swift */; };
 		9DFF82A72A78EEBA00DACA06 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFF82A62A78EEBA00DACA06 /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9D67903A2AB4F19000220920 /* ProfileStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStruct.swift; sourceTree = "<group>"; };
 		9DFF829F2A78EEBA00DACA06 /* profileTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = profileTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DFF82A22A78EEBA00DACA06 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9DFF82A42A78EEBA00DACA06 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				9DFF82A42A78EEBA00DACA06 /* SceneDelegate.swift */,
 				9DFF82A62A78EEBA00DACA06 /* ViewController.swift */,
 				9DFF82B82A7952E900DACA06 /* CollectionViewCell.swift */,
+				9D67903A2AB4F19000220920 /* ProfileStruct.swift */,
 				9DFF82AB2A78EEBB00DACA06 /* Assets.xcassets */,
 				9DFF82AD2A78EEBB00DACA06 /* LaunchScreen.storyboard */,
 				9DFF82B02A78EEBB00DACA06 /* Info.plist */,
@@ -139,6 +142,7 @@
 			files = (
 				9DFF82A72A78EEBA00DACA06 /* ViewController.swift in Sources */,
 				9DFF82A32A78EEBA00DACA06 /* AppDelegate.swift in Sources */,
+				9D67903B2AB4F19000220920 /* ProfileStruct.swift in Sources */,
 				9DFF82B92A7952E900DACA06 /* CollectionViewCell.swift in Sources */,
 				9DFF82A52A78EEBA00DACA06 /* SceneDelegate.swift in Sources */,
 			);
